@@ -1,3 +1,7 @@
 .venv
 venv
 /venv
+package.json
+/package.json
+package-lock.json
+node_modules
