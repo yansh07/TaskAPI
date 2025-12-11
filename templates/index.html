@@ -1,210 +1,514 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Velocis API | The Backend Backbone</title>
-    <link href="/static/styles/core.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="/static/styles/core.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .brand-font { font-family: 'Space Grotesk', sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .text-glow {
-            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-        }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      .brand-font {
+        font-family: "Space Grotesk", sans-serif;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .text-glow {
+        text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+      }
     </style>
-</head>
-<body class="overflow-x-hidden antialiased bg-slate-950 text-slate-300 selection:bg-indigo-500 selection:text-white">
-
+  </head>
+  <body
+    class="overflow-x-hidden antialiased bg-slate-950 text-slate-300 selection:bg-indigo-500 selection:text-white"
+  >
     <!-- Navigation -->
-    <nav class="fixed top-0 z-50 w-full transition-all duration-300 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Brand -->
-                <div class="flex-shrink-0">
-                    <a href="/" class="text-2xl font-bold text-transparent brand-font bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
-                        Velocis<span class="text-white">API</span>
-                    </a>
-                </div>
-                
-                <!-- CTA Buttons -->
-                <div class="hidden md:block">
-                    <div class="flex items-baseline ml-10 space-x-4">
-                        <a href="#" class="px-3 py-2 text-sm font-medium transition-colors rounded-md text-slate-400 hover:text-white">Log In</a>
-                        <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transform hover:-translate-y-0.5">
-                            Get Started
-                        </a>
-                    </div>
-                </div>
-                <!-- Mobile menu button (Hamburger) - You can add JS to toggle this later -->
-                <div class="flex -mr-2 md:hidden">
-                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none">
-                        <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
+    <nav
+      class="fixed top-0 z-50 w-full transition-all duration-300 border-b border-white/5 bg-slate-950/80 backdrop-blur-md"
+    >
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+          <!-- Brand -->
+          <div class="flex-shrink-0">
+            <a
+              href="/"
+              class="text-2xl font-bold text-transparent brand-font bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400"
+            >
+              Velocis<span class="text-white">API</span>
+            </a>
+          </div>
+
+          <!-- CTA Buttons (desktop only) -->
+          <div class="hidden md:block">
+            <div class="flex items-baseline ml-10 space-x-4">
+              <a
+                href="#"
+                class="px-3 py-2 text-sm font-medium transition-colors rounded-md text-slate-400 hover:text-white"
+                >Log In</a
+              >
+              <a
+                href="#"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transform hover:-translate-y-0.5"
+              >
+                Get Started
+              </a>
             </div>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="flex -mr-2 md:hidden">
+            <button
+              id="menuBtn"
+              aria-expanded="false"
+              aria-controls="mobileMenu"
+              type="button"
+              class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none"
+            >
+              <!-- two states: hamburger and X (we swap innerHTML in JS) -->
+              <svg
+                id="menuIcon"
+                class="w-6 h-6"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Mobile Dropdown Menu: placed outside the flex row so it doesn't break the header layout -->
+      <div
+        id="mobileMenu"
+        class="hidden text-center border-t glass-card md:hidden border-white/5"
+      >
+        <div class="px-4 py-4 mx-auto space-y-3 font-semibold tracking-tight bg-transparent max-w-7xl">
+          <a href="/" class="block text-slate-300 hover:text-white">Home</a>
+          <a href="/login" class="block text-slate-300 hover:text-white"
+            >Login</a
+          >
+          <a href="/get-started" class="block text-slate-300 hover:text-white"
+            >Get Started</a
+          >
+        </div>
+      </div>
     </nav>
 
     <!-- Hero Section -->
     <div class="relative pt-32 pb-20 overflow-hidden sm:pt-40 sm:pb-24">
-        <!-- Background Decor -->
-        <div class="absolute top-0 z-0 w-full h-full -translate-x-1/2 pointer-events-none left-1/2">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob"></div>
-            <div class="absolute top-20 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-2000"></div>
+      <!-- Background Decor -->
+      <div
+        class="absolute top-0 z-0 w-full h-full -translate-x-1/2 pointer-events-none left-1/2"
+      >
+        <div
+          class="absolute top-20 left-10 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob"
+        ></div>
+        <div
+          class="absolute top-20 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-2000"
+        ></div>
+      </div>
+
+      <div
+        class="relative z-10 px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8"
+      >
+        <div
+          class="inline-flex items-center px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-8"
+        >
+          <span
+            class="w-2 h-2 mr-2 bg-indigo-400 rounded-full animate-pulse"
+          ></span>
+          v2.0 Beta Live
         </div>
 
-        <div class="relative z-10 px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
-            <div class="inline-flex items-center px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-8">
-                <span class="w-2 h-2 mr-2 bg-indigo-400 rounded-full animate-pulse"></span> v2.0 Beta Live
-            </div>
-            
-            <h1 class="mb-6 text-5xl font-bold tracking-tight text-white md:text-7xl">
-                High-Performance Tasks. <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 text-glow">Zero Overhead.</span>
-            </h1>
-            
-            <p class="max-w-2xl mx-auto mt-4 text-xl text-slate-400">
-                Built with FastAPI and specialized Data Structures. The only task manager that cares more about <span class="font-mono text-indigo-400">O(1)</span> complexity than pretty colors.
-            </p>
+        <h1
+          class="mb-6 text-5xl font-bold tracking-tight text-white md:text-7xl"
+        >
+          High-Performance Tasks. <br />
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 text-glow"
+            >Zero Overhead.</span
+          >
+        </h1>
 
-            <div class="flex justify-center gap-4 mt-10">
-                <a href="{{ repo_link }}" target="_blank" class="glass-card px-8 py-3.5 rounded-lg text-white font-semibold hover:bg-white/10 transition-all flex items-center gap-2 group">
-                    <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    Star on GitHub
-                </a>
-                <a href="#features" class="bg-white text-slate-900 px-8 py-3.5 rounded-lg font-bold hover:bg-indigo-50 transition-all flex items-center gap-2">
-                    Explore Docs
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                </a>
-            </div>
+        <p class="max-w-2xl mx-auto mt-4 text-xl text-slate-400">
+          Built with FastAPI and specialized Data Structures. The only task
+          manager that cares more about
+          <span class="font-mono text-indigo-400">O(1)</span> complexity than
+          pretty colors.
+        </p>
+
+        <div class="flex justify-center gap-4 mt-10">
+          <a
+            href="{{ repo_link }}"
+            target="_blank"
+            class="glass-card px-8 py-3.5 rounded-lg text-white font-semibold hover:bg-white/10 transition-all flex items-center gap-2 group"
+          >
+            <svg
+              class="w-5 h-5 text-slate-300 group-hover:text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+              />
+            </svg>
+            Star on GitHub
+          </a>
+          <a
+            href="#features"
+            class="bg-white text-slate-900 px-8 py-3.5 rounded-lg font-bold hover:bg-indigo-50 transition-all flex items-center gap-2"
+          >
+            Explore Docs
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              ></path>
+            </svg>
+          </a>
         </div>
+      </div>
     </div>
 
     <!-- Tech Stack Ticker (Slightly blurry to look cool) -->
-    <div class="py-8 overflow-hidden border-y border-white/5 bg-black/20 backdrop-blur-sm">
-        <div class="flex justify-center gap-12 px-4 mx-auto font-mono text-sm max-w-7xl text-slate-500 md:text-base opacity-70">
-            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span>FastAPI</span>
-            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span>PostgreSQL</span>
-            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-red-500 rounded-full"></span>Redis</span>
-            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-yellow-500 rounded-full"></span>Celery</span>
-            <span class="flex items-center gap-2"><span class="w-2 h-2 bg-indigo-500 rounded-full"></span>Docker</span>
-        </div>
+    <div
+      class="py-8 overflow-hidden border-y border-white/5 bg-black/20 backdrop-blur-sm"
+    >
+      <div
+        class="flex justify-center gap-12 px-4 mx-auto font-mono text-sm max-w-7xl text-slate-500 md:text-base opacity-70"
+      >
+        <span class="flex items-center gap-2"
+          ><span class="w-2 h-2 bg-green-500 rounded-full"></span>FastAPI</span
+        >
+        <span class="flex items-center gap-2"
+          ><span class="w-2 h-2 bg-blue-500 rounded-full"></span
+          >PostgreSQL</span
+        >
+        <span class="flex items-center gap-2"
+          ><span class="w-2 h-2 bg-red-500 rounded-full"></span>Redis</span
+        >
+        <span class="flex items-center gap-2"
+          ><span class="w-2 h-2 bg-yellow-500 rounded-full"></span>Celery</span
+        >
+        <span class="flex items-center gap-2"
+          ><span class="w-2 h-2 bg-indigo-500 rounded-full"></span>Docker</span
+        >
+      </div>
     </div>
 
     <!-- Features Grid -->
     <div id="features" class="relative py-24">
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="mb-16 text-center">
-                <h2 class="mb-4 text-3xl font-bold text-white">Under The Hood</h2>
-                <p class="text-slate-400">We didn't just use `list.append()`. We engineered it.</p>
-            </div>
-
-            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <!-- Card 1 -->
-                <div class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-indigo-500/10 group-hover:bg-indigo-500/20">
-                        <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h3 class="mb-3 text-xl font-semibold text-white">Priority Queues</h3>
-                    <p class="text-sm leading-relaxed text-slate-400">
-                        We use Python's <code class="bg-slate-800 px-1 py-0.5 rounded text-indigo-300">collections.deque</code> for O(1) push/pop operations. Your high-priority tasks never wait in line.
-                    </p>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20">
-                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    </div>
-                    <h3 class="mb-3 text-xl font-semibold text-white">RBAC & Security</h3>
-                    <p class="text-sm leading-relaxed text-slate-400">
-                        JWT Authentication and Role-Based Access Control baked in. Admins rule, users drool, and read-only accounts just watch.
-                    </p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-pink-500/10 group-hover:bg-pink-500/20">
-                        <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                    </div>
-                    <h3 class="mb-3 text-xl font-semibold text-white">Async Workers</h3>
-                    <p class="text-sm leading-relaxed text-slate-400">
-                        Heavy lifting happens in the background. Emails, webhooks, and notifications run on Celery/Redis without blocking your main thread.
-                    </p>
-                </div>
-                
-                <!-- Card 4 -->
-                 <div class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-cyan-500/10 group-hover:bg-cyan-500/20">
-                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="mb-3 text-xl font-semibold text-white">Data Export</h3>
-                    <p class="text-sm leading-relaxed text-slate-400">
-                        Need your data? Grab it in JSON or CSV instantly. We don't hold your tasks hostage.
-                    </p>
-                </div>
-
-                 <!-- Card 5 -->
-                 <div class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-emerald-500/10 group-hover:bg-emerald-500/20">
-                        <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="mb-3 text-xl font-semibold text-white">Rate Limiting</h3>
-                    <p class="text-sm leading-relaxed text-slate-400">
-                        Integrated FastAPI-Limiter ensures your API doesn't crash when someone writes a `while True` loop against your endpoint.
-                    </p>
-                </div>
-
-                <!-- Card 6 -->
-                 <div class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group">
-                    <div class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-orange-500/10 group-hover:bg-orange-500/20">
-                        <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </div>
-                    <h3 class="mb-3 text-xl font-semibold text-white">DB Agnostic</h3>
-                    <p class="text-sm leading-relaxed text-slate-400">
-                        Currently rocking SQLite for dev speed, but SQLAlchemy ORM means switching to Postgres is just a connection string away.
-                    </p>
-                </div>
-            </div>
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-16 text-center">
+          <h2 class="mb-4 text-3xl font-bold text-white">Under The Hood</h2>
+          <p class="text-slate-400">
+            We didn't just use `list.append()`. We engineered it.
+          </p>
         </div>
+
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <!-- Card 1 -->
+          <div
+            class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-indigo-500/10 group-hover:bg-indigo-500/20"
+            >
+              <svg
+                class="w-6 h-6 text-indigo-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="mb-3 text-xl font-semibold text-white">
+              Priority Queues
+            </h3>
+            <p class="text-sm leading-relaxed text-slate-400">
+              We use Python's
+              <code class="bg-slate-800 px-1 py-0.5 rounded text-indigo-300"
+                >collections.deque</code
+              >
+              for O(1) push/pop operations. Your high-priority tasks never wait
+              in line.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div
+            class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20"
+            >
+              <svg
+                class="w-6 h-6 text-purple-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="mb-3 text-xl font-semibold text-white">
+              RBAC & Security
+            </h3>
+            <p class="text-sm leading-relaxed text-slate-400">
+              JWT Authentication and Role-Based Access Control baked in. Admins
+              rule, users drool, and read-only accounts just watch.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div
+            class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-pink-500/10 group-hover:bg-pink-500/20"
+            >
+              <svg
+                class="w-6 h-6 text-pink-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="mb-3 text-xl font-semibold text-white">Async Workers</h3>
+            <p class="text-sm leading-relaxed text-slate-400">
+              Heavy lifting happens in the background. Emails, webhooks, and
+              notifications run on Celery/Redis without blocking your main
+              thread.
+            </p>
+          </div>
+
+          <!-- Card 4 -->
+          <div
+            class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-cyan-500/10 group-hover:bg-cyan-500/20"
+            >
+              <svg
+                class="w-6 h-6 text-cyan-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="mb-3 text-xl font-semibold text-white">Data Export</h3>
+            <p class="text-sm leading-relaxed text-slate-400">
+              Need your data? Grab it in JSON or CSV instantly. We don't hold
+              your tasks hostage.
+            </p>
+          </div>
+
+          <!-- Card 5 -->
+          <div
+            class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-emerald-500/10 group-hover:bg-emerald-500/20"
+            >
+              <svg
+                class="w-6 h-6 text-emerald-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="mb-3 text-xl font-semibold text-white">Rate Limiting</h3>
+            <p class="text-sm leading-relaxed text-slate-400">
+              Integrated FastAPI-Limiter ensures your API doesn't crash when
+              someone writes a `while True` loop against your endpoint.
+            </p>
+          </div>
+
+          <!-- Card 6 -->
+          <div
+            class="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-300 group"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-6 transition-colors rounded-lg bg-orange-500/10 group-hover:bg-orange-500/20"
+            >
+              <svg
+                class="w-6 h-6 text-orange-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="mb-3 text-xl font-semibold text-white">DB Agnostic</h3>
+            <p class="text-sm leading-relaxed text-slate-400">
+              Currently rocking SQLite for dev speed, but SQLAlchemy ORM means
+              switching to Postgres is just a connection string away.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- About The Dev (Sleek) -->
     <div class="py-20 bg-slate-900/50">
-        <div class="max-w-4xl px-4 mx-auto">
-            <div class="flex flex-col items-center gap-10 p-8 glass-card rounded-3xl md:p-12 md:flex-row">
-                <div class="relative group">
-                    <div class="absolute transition duration-200 rounded-full -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 blur opacity-40 group-hover:opacity-75"></div>
-                    <!-- Placeholder for your Github Avatar or similar -->
-                    <img src="https://github.com/yansh07.png" alt="Priyanshu" class="relative object-cover w-32 h-32 transition-all duration-500 border-4 rounded-full border-slate-900 grayscale hover:grayscale-0">
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h2 class="mb-2 text-2xl font-bold text-white">Built by Priyanshu</h2>
-                    <p class="mb-4 font-mono text-sm text-indigo-400">Backend Engineer & Python Specialist</p>
-                    <p class="mb-6 leading-relaxed text-slate-400">
-                        3rd Sem BCA Undergrad focusing on scalable architecture. I speak fluent Python, FastAPI, and SQL. This project is a showcase of clean code, concurrency, and proper API design.
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-3 md:justify-start">
-                        <span class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700">Python</span>
-                        <span class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700">FastAPI</span>
-                        <span class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700">Docker</span>
-                        <span class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700">Redis</span>
-                    </div>
-                </div>
+      <div class="max-w-4xl px-4 mx-auto">
+        <div
+          class="flex flex-col items-center gap-10 p-8 glass-card rounded-3xl md:p-12 md:flex-row"
+        >
+          <div class="relative group">
+            <div
+              class="absolute transition duration-200 rounded-full -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 blur opacity-40 group-hover:opacity-75"
+            ></div>
+            <!-- Placeholder for your Github Avatar or similar -->
+            <img
+              src="https://github.com/yansh07.png"
+              alt="Priyanshu"
+              class="relative object-cover w-32 h-32 transition-all duration-500 border-4 rounded-full border-slate-900 grayscale hover:grayscale-0"
+            />
+          </div>
+          <div class="flex-1 text-center md:text-left">
+            <h2 class="mb-2 text-2xl font-bold text-white">
+              Built by Priyanshu
+            </h2>
+            <p class="mb-4 font-mono text-sm text-indigo-400">
+              Backend Engineer & Python Specialist
+            </p>
+            <p class="mb-6 leading-relaxed text-slate-400">
+              3rd Sem BCA Undergrad focusing on scalable architecture. I speak
+              fluent Python, FastAPI, and SQL. This project is a showcase of
+              clean code, concurrency, and proper API design.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3 md:justify-start">
+              <span
+                class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700"
+                >Python</span
+              >
+              <span
+                class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700"
+                >FastAPI</span
+              >
+              <span
+                class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700"
+                >Docker</span
+              >
+              <span
+                class="px-3 py-1 text-xs border rounded-full bg-slate-800 text-slate-300 border-slate-700"
+                >Redis</span
+              >
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Includes Footer -->
     {% include './footer.html' %}
+    <script>
+      (function () {
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const menuIcon = document.getElementById("menuIcon");
 
-</body>
+        const hamburgerSVG =
+          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
+        const closeSVG =
+          '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
+
+        function openMenu() {
+          mobileMenu.classList.remove("hidden");
+          menuBtn.setAttribute("aria-expanded", "true");
+          menuIcon.innerHTML = closeSVG;
+        }
+
+        function closeMenu() {
+          mobileMenu.classList.add("hidden");
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuIcon.innerHTML = hamburgerSVG;
+        }
+
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (mobileMenu.classList.contains("hidden")) openMenu();
+          else closeMenu();
+        });
+        document.addEventListener("click", (e) => {
+          if (!mobileMenu.classList.contains("hidden")) {
+            const target = e.target;
+            if (!mobileMenu.contains(target) && !menuBtn.contains(target)) {
+              closeMenu();
+            }
+          }
+        });
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 768) {
+            closeMenu();
+          }
+        });
+        closeMenu();
+      })();
+    </script>
+  </body>
 </html>
